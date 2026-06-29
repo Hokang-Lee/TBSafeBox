@@ -1,0 +1,16 @@
+{
+  "theme": "vista",
+  "last_diff_log": "",
+  "batch_size": 5000,
+  "max_rows": 1000000,
+  "window": {
+    "width": 1200,
+    "height": 800
+  },
+  "columns": [
+    "path",
+    "status",
+    "size",
+    "mtime"
+  ]
+}

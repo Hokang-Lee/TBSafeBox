@@ -1,0 +1,38 @@
+{
+  "source_dir": "/var/spool/epms",
+  "restore_target_parent": "/var/spool",
+  "dest_mount": "/mnt/samba",
+  "local_save": "C:/Backup/epms",
+  "compression_level": 6,
+  "threads": 0,
+  "one_file_system": true,
+  "excludes": [
+    "*.tmp",
+    "*.lock",
+    "*~",
+    "lost+found"
+  ],
+  "ssh": {
+    "host": "192.168.1.212",
+    "port": 22,
+    "user": "root",
+    "use_password": false,               // ← ここを false に
+    "password": "",
+    "keyfile": "C:/Users/Administrator/.ssh/id_ed25519",
+    "use_sudo": false,
+    "transfer_method": "sftp",
+    "known_hosts_policy": "accept-new",
+    "locked": true                       // ← 任意：UIをロックして操作ミス防止
+  },
+  "health_check": {
+    "enabled": true,
+    "require_mounted": true,
+    "min_free_gb": 5
+  },
+  "retention": {
+    "remote_keep_n": 10,
+    "remote_keep_days": 0,
+    "local_keep_n": 10,
+    "local_keep_days": 0
+  }
+}
