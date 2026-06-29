@@ -1,2 +1,0 @@
-ts_start,ts_end,total,ok,ng,success_rate,failure_rate,p50_ms,p90_ms,p99_ms,max_ms,failures_by_stage,top_errors
-1769292018.574,1769292618.776,999,788,211,0.788789,0.211211,600100.426,600189.398,600229.419,600233.634,connect=211,socket error: EOF=211
