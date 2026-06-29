@@ -1267,6 +1267,8 @@ class TarTab(ttk.Frame):
 
                     )
 
+                    archive_path = local_arch
+
                     self._append_log(f"[pipeline] done: local={local_arch}, remote={remote_arch}")
 
                     
@@ -1282,6 +1284,18 @@ class TarTab(ttk.Frame):
                     if lk > 0 or ld > 0:
 
                         manage_local_retention(local_dir, keep_n=lk, keep_days=ld, log_cb=self._append_log)
+
+                    try:
+
+                        rk = int(self.rt_r_keep_n.get() or 0); rd = int(self.rt_r_keep_days.get() or 0)
+
+                    except Exception:
+
+                        rk, rd = 0, 0
+
+                    if remote_arch and (rk > 0 or rd > 0):
+
+                        manage_remote_retention(os.path.dirname(remote_arch), self._ssh_cfg(), keep_n=rk, keep_days=rd, log_cb=self._append_log)
 
                 else:
 
@@ -1806,4 +1820,3 @@ class TarTab(ttk.Frame):
         self.cfg = s
 
         self.settings_mgr.settings = s
-

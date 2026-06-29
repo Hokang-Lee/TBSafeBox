@@ -4,8 +4,8 @@
     "host": "192.168.1.212",
     "port": 22,
     "user": "root",
-    "use_password": true,
-    "password": "root",
+    "use_password": false,
+    "password": "",
     "keyfile": "C:/keys/id_ed25519",
     "use_sudo": true,
     "transfer_method": "sftp"

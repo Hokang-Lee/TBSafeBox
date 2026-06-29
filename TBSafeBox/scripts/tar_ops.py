@@ -8,6 +8,7 @@ import shutil
 import hashlib
 import socket
 import time
+import threading
 from datetime import datetime, timedelta
 from typing import List, Optional, Callable, Tuple, Dict
 
@@ -1285,6 +1286,14 @@ def run_backup_pipeline_to_windows(
     with open(local_part, "wb") as lf:
         # ★ stderr は PIPE に分離（STDOUT へ合流しない）
         proc = subprocess.Popen(full, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        stderr_chunks = []
+
+        def _drain_stderr():
+            for chunk in iter(lambda: proc.stderr.read(64 * 1024), b""):
+                stderr_chunks.append(chunk)
+
+        stderr_thread = threading.Thread(target=_drain_stderr, daemon=True)
+        stderr_thread.start()
         total = 0
         while True:
             chunk = proc.stdout.read(64 * 1024)
@@ -1295,9 +1304,10 @@ def run_backup_pipeline_to_windows(
             if log_cb and total % (10 * 1024 * 1024) == 0:
                 log_cb(f"[pipeline] received {total} bytes")
         rc = proc.wait()
+        stderr_thread.join(timeout=5)
         # ★ 失敗時の stderr をログ出力
         if rc != 0:
-            err = (proc.stderr.read() or b"").decode("utf-8", errors="ignore")
+            err = b"".join(stderr_chunks).decode("utf-8", errors="ignore")
             _log(f"[pipeline] ssh failed (rc={rc})\n{err}", log_cb)
             try: os.remove(local_part)
             except Exception: pass

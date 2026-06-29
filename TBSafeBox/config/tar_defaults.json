@@ -1,30 +1,23 @@
 {
-  "source_dir": "/var/spool/epms",
-  "restore_target_parent": "/var/spool",
-  "dest_mount": "/mnt/samba",
-  "local_save": "C:/Backup/epms",
-  "compression_level": 6,
-  "threads": 0,
-  "one_file_system": true,
-  "excludes": [
-    "*.tmp",
-    "*.lock",
-    "*~",
-    "lost+found"
-  ],
+  "exec_mode": "SSH",
   "ssh": {
     "host": "192.168.1.212",
     "port": 22,
     "user": "root",
-    "use_password": false,               // ← ここを false に
+    "use_password": false,
     "password": "",
     "keyfile": "C:/Users/Administrator/.ssh/id_ed25519",
     "use_sudo": false,
     "transfer_method": "sftp",
     "known_hosts_policy": "accept-new",
-    "locked": true                       // ← 任意：UIをロックして操作ミス防止
+    "locked": true
   },
-  "health_check": {
+  "paths": {
+    "source_dir": "/var/spool/epms",
+    "restore_parent": "/var/spool",
+    "local_save": "C:/Backup/epms"
+  },
+  "health": {
     "enabled": true,
     "require_mounted": true,
     "min_free_gb": 5
@@ -34,5 +27,25 @@
     "remote_keep_days": 0,
     "local_keep_n": 10,
     "local_keep_days": 0
+  },
+  "options": {
+    "compression_level": 6,
+    "threads": 0,
+    "one_file_system": true,
+    "excludes": [
+      "*.tmp",
+      "*.lock",
+      "*~",
+      "lost+found"
+    ]
+  },
+  "restore_opts": {
+    "from_local": true,
+    "verify_before": true,
+    "cleanup_remote": true,
+    "remote_tmp": ""
+  },
+  "ui": {
+    "selected_tab": "Backup"
   }
 }
